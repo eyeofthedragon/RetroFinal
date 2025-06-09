@@ -44,7 +44,8 @@ setSpriteCostume 1,SPRITE_BASE+3*$40
 setSpriteColor 1,2
 enableMultiColorSprite 1
 
-rand16 256
+rand16 216
+adcax #40
 setSpriteX 1,AX
 setSpriteY 1,0
 
@@ -59,7 +60,8 @@ setSpriteCostume 2,SPRITE_BASE+4*$40
 setSpriteColor 2,1
 enableMultiColorSprite 2
 
-rand16 256
+rand16 216
+adcax #40
 setSpriteX 2,AX
 setSpriteY 2,40
 
@@ -77,7 +79,8 @@ enableMultiColorSprite 3
 enableXexpandSprite 3
 enableYexpandSprite 3
 
-rand16 256
+rand16 216
+adcax #40
 setSpriteX 3,AX
 setSpriteY 3,40
 
@@ -141,7 +144,8 @@ do
         ;make sure each sprite loops once it hits the bottom of the screen
         sbc #254
         if ge ;if a > 255
-            rand16 256
+            rand16 216
+	    adcax #40
             setSpriteX 2,AX
 	    showSprite 2
         endif
@@ -152,7 +156,8 @@ do
 
         sbc #254
         if ge
-            rand16 256
+            rand16 216
+	    adcax #40
             setSpriteX 3,AX
             showSprite 3
         endif
@@ -162,7 +167,8 @@ do
         restore Y
     next
 
-    rand16 256 ;puts a random number from 0 to 255 in AX
+    rand16 216 ;puts a random number from 0 to 215 in AX
+    adcax #40
     setSpriteX 1,AX
     showSprite 1
 loop
