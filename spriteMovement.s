@@ -183,11 +183,11 @@ collisionPlus:
     stx 1459
     stx currentScore
   
-    ;txa
-    ;cmp #8
-    ;if eq
-        ;print "you win!"
-    ;endif
+    lda currentScore
+    cmp #56
+    if eq
+        print "you win!"
+    endif
 
     jmp $ea31
 
@@ -212,9 +212,9 @@ collisionOver:
     sty $d020
     hideSprite 3
 
-    print "game over"
+    ;print "game over"
     sei
-    delay_ms 3000
+    ;delay_ms 3000
 
     rts
 
