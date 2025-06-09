@@ -43,8 +43,8 @@ setSpriteY 1,0
 showSprite 1
 
 
-lda #195 ;test sprite????
-sta 2042 ;sprite at $3080
+lda #195 ;turtle facing left I think
+sta 2042 ;sprite at $3080?
 
 enableXexpandSprite 2 ;set up turtle sprite
 enableYexpandSprite 2
@@ -78,16 +78,6 @@ setSpriteY 3,40
 
 showSprite 3
 
-
-;okay okay
-;so to poke things onto the screen
-;it's 1024 + some amount. so if I can just find the right spot
-;it'll be >1024+255 which is uhhh 1279
-;let's just try
-;equiv of poke 1285,81 <-ball
-;which is uh
-;load 81 into A
-;store value of a into 1285
 
 ;SCORE
 
@@ -145,6 +135,7 @@ do ;move sprite down across whole screen
         if ge ;if a > 255
             rand16 256
             setSpriteX 2,AX
+            showSprite 2
         endif
         adc #255
 
@@ -155,6 +146,7 @@ do ;move sprite down across whole screen
         if ge
             rand16 256
             setSpriteX 3,AX
+            showSprite 3
         endif
         adc #255
 
@@ -164,6 +156,7 @@ do ;move sprite down across whole screen
 
     rand16 256 ;puts a random number from 0 to 255 in AX
     setSpriteX 1,AX
+    showSprite 1
 loop
 
 rts
