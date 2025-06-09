@@ -87,7 +87,49 @@ showSprite 3
 ; SPRITE MOVEMENT
 ;****************************************************
 
-do 
+;SCORE
+
+lda #14 ;N
+sta 1297
+lda #21 ;U
+sta 1298
+lda #13 ;M
+sta 1299
+lda #2 ;B
+sta 1300
+lda #5 ;E
+sta 1301
+lda #18 ;R
+sta 1302
+
+lda #15 ;O
+sta 1339
+lda #6 ;F
+sta 1340
+
+lda #6 ;F
+sta 1376
+lda #12 ;L
+sta 1377
+lda #15 ;O
+sta 1378
+lda #23 ;W
+sta 1379
+lda #5 ;E
+sta 1380
+lda #18 ;R
+sta 1381
+lda #19 ;S
+sta 1382
+lda #58 ;:
+sta 1383
+
+
+lda #48 ;0
+sta 1459
+
+
+do ;move sprite down across whole screen
     for Y,0,to,255
         store Y
         setSpriteY 1,Y
@@ -96,11 +138,12 @@ do
         adc #40
         setSpriteY 2,A
 
+        ;make sure each sprite loops once it hits the bottom of the screen
         sbc #254
         if ge ;if a > 255
             rand16 256
             setSpriteX 2,AX
-	    showSprite 2
+	        showSprite 2
         endif
         adc #255
 
@@ -111,7 +154,7 @@ do
         if ge
             rand16 256
             setSpriteX 3,AX
-	    showSprite 3
+            showSprite 3
         endif
         adc #255
 
@@ -134,19 +177,46 @@ collisionPlus:
     ldy #5 ;green
     sty $d020
     hideSprite 1
+
+    ldx currentScore
+    inx
+    stx 1459
+    stx currentScore
+  
+    ;txa
+    ;cmp #8
+    ;if eq
+        ;print "you win!"
+    ;endif
+
     jmp $ea31
 
 collisionMinus:
     ldy #2 ;red
     sty $d020
     hideSprite 2
+
+    ldx currentScore
+    txa
+    sbc #49
+    if ge ;don't decrement if we're already at 0
+        dex
+    endif
+    stx 1459
+    stx currentScore
+
     jmp $ea31
 
 collisionOver:
     ldy #0 ;black
     sty $d020
     hideSprite 3
-    jmp $ea31
+
+    print "game over"
+    sei
+    delay_ms 3000
+
+    rts
 
 
 read_input:
@@ -160,7 +230,6 @@ read_input:
     beq collisionMinus
     cmpax #9
     beq collisionOver
-
 
     ;player movement
     read_keys_WASDspace
@@ -185,3 +254,4 @@ read_input:
     jmp $ea31
 
 joyvalue: .byte 00
+currentScore: .byte 48
