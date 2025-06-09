@@ -1,6 +1,8 @@
 .include "LAMAlib.inc"
 .include "LAMAlib-sprites.inc"
+
 SCREEN_BASE=$400
+SPRITE_BASE=$3000
 
 sei
 ldax #read_input ;interrupt routine
@@ -9,13 +11,22 @@ cli
 
 clrscr ;clear screen
 
+lda #14
+sta $d020
+lda #13
+sta $d021
+
 ;****************************************************
 ;PLAYER SPRITE 0
 ;****************************************************
 
-setSpriteCostume 0,$3000
-setSpriteColor 0,5
+setSpriteCostume 0,SPRITE_BASE ;3040 is second costume
+
+setSpriteColor 0,3
 enableMultiColorSprite 0
+
+setSpriteMultiColor1 0
+setSpriteMultiColor2 8
 
 enableXexpandSprite 0
 enableYexpandSprite 0
@@ -28,13 +39,10 @@ showSprite 0
 ;FLOWER SPRITE 1 (good)
 ;****************************************************
 
-setSpriteCostume 1,$3040
-setSpriteColor 1,5
-enableMultiColorSprite 1
-setSpriteMultiColor1 9
+setSpriteCostume 1,SPRITE_BASE+3*$40
 
-enableXexpandSprite 1
-enableYexpandSprite 1
+setSpriteColor 1,2
+enableMultiColorSprite 1
 
 rand16 256
 setSpriteX 1,AX
@@ -46,16 +54,10 @@ showSprite 1
 ;FLOWER SPRITE 2 (evil)
 ;****************************************************
 
-;setSpriteCostume 1,$3080
-lda #195
-sta 2042
+setSpriteCostume 2,SPRITE_BASE+4*$40
 
-setSpriteColor 2,5
+setSpriteColor 2,1
 enableMultiColorSprite 2
-setSpriteMultiColor2 7
-
-enableXexpandSprite 2
-enableYexpandSprite 2
 
 rand16 256
 setSpriteX 2,AX
@@ -67,11 +69,9 @@ showSprite 2
 ;DATE SPRITE 3
 ;****************************************************
 
-;setSpriteCostume 1,$3120
-lda #194
-sta 2043
+setSpriteCostume 3,SPRITE_BASE+2*$40
 
-setSpriteColor 3,5
+setSpriteColor 3,4
 enableMultiColorSprite 3
 
 enableXexpandSprite 3
@@ -84,10 +84,8 @@ setSpriteY 3,40
 showSprite 3
 
 ;****************************************************
-; SPRITE MOVEMENT
-;****************************************************
-
 ;SCORE
+;****************************************************
 
 lda #14 ;N
 sta 1297
@@ -128,8 +126,10 @@ sta 1383
 lda #48 ;0
 sta 1459
 
-
-do ;move sprite down across whole screen
+;****************************************************
+; SPRITE MOVEMENT - move sprite down across whole screen
+;****************************************************
+do
     for Y,0,to,255
         store Y
         setSpriteY 1,Y
@@ -143,7 +143,7 @@ do ;move sprite down across whole screen
         if ge ;if a > 255
             rand16 256
             setSpriteX 2,AX
-	        showSprite 2
+	    showSprite 2
         endif
         adc #255
 
@@ -184,10 +184,10 @@ collisionPlus:
     stx currentScore
   
     lda currentScore
-    cmp #56
-    if eq
-        print "you win!"
-    endif
+    ;cmp #56
+    ;if eq
+     ;   print "you win!"
+    ;endif
 
     jmp $ea31
 
@@ -216,7 +216,7 @@ collisionOver:
     sei
     ;delay_ms 3000
 
-    rts
+    ;rts
 
 
 read_input:
