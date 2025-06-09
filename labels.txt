@@ -1,0 +1,10 @@
+al 0009E0 .__BSS_LOAD__
+al 0009E0 .__BSS_RUN__
+al 000000 .__BSS_SIZE__
+al 000001 .__EXEHDR__
+al 000001 .__LOADADDR__
+al 000000 .__ZP_FILEOFFS__
+al 0000A5 .__ZP_LAST__
+al 000012 .__ZP_SIZE__
+al 0000A5 .__ZP_START__
+al 000991 ._read_keys_WASDspace_sr
