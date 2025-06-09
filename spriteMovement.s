@@ -1,6 +1,6 @@
 .include "LAMAlib.inc"
 .include "LAMAlib-sprites.inc"
-
+SCREEN_BASE=$400
 
 sei
 ldax #read_input ;interrupt routine
@@ -9,32 +9,32 @@ cli
 
 clrscr ;clear screen
 
-;PLAYER SPRITE
-lda #196 ;snake
-sta 2040 ;sprite at $3040
+;****************************************************
+;PLAYER SPRITE 0
+;****************************************************
+
+setSpriteCostume 0,$3000
+setSpriteColor 0,5
+enableMultiColorSprite 0
 
 enableXexpandSprite 0
 enableYexpandSprite 0
 
-setSpriteColor 0,5
-
-setSpriteX 0,200
-setSpriteY 0,200
+setSpriteXY 0,200,200
 
 showSprite 0
 
+;****************************************************
+;FLOWER SPRITE 1 (good)
+;****************************************************
 
-;FLOWER SPRITES
-lda #193 ;turtle facing down
-sta 2041 ;sprite at $3000
-
-enableXexpandSprite 1 ;set up turtle sprite
-enableYexpandSprite 1
-
-enableMultiColorSprite 1
+setSpriteCostume 1,$3040
 setSpriteColor 1,5
+enableMultiColorSprite 1
 setSpriteMultiColor1 9
-setSpriteMultiColor2 7
+
+enableXexpandSprite 1
+enableYexpandSprite 1
 
 rand16 256
 setSpriteX 1,AX
@@ -42,17 +42,20 @@ setSpriteY 1,0
 
 showSprite 1
 
+;****************************************************
+;FLOWER SPRITE 2 (evil)
+;****************************************************
 
-lda #195 ;turtle facing left I think
-sta 2042 ;sprite at $3080?
+;setSpriteCostume 1,$3080
+lda #195
+sta 2042
 
-enableXexpandSprite 2 ;set up turtle sprite
-enableYexpandSprite 2
-
-enableMultiColorSprite 2
 setSpriteColor 2,5
-setSpriteMultiColor1 9
+enableMultiColorSprite 2
 setSpriteMultiColor2 7
+
+enableXexpandSprite 2
+enableYexpandSprite 2
 
 rand16 256
 setSpriteX 2,AX
@@ -60,17 +63,19 @@ setSpriteY 2,40
 
 showSprite 2
 
+;****************************************************
+;DATE SPRITE 3
+;****************************************************
 
-lda #194 ;test sprite????
-sta 2043 ;sprite at $3080
+;setSpriteCostume 1,$3120
+lda #194
+sta 2043
 
-enableXexpandSprite 3 ;set up turtle sprite
-enableYexpandSprite 3
-
-enableMultiColorSprite 3
 setSpriteColor 3,5
-setSpriteMultiColor1 9
-setSpriteMultiColor2 7
+enableMultiColorSprite 3
+
+enableXexpandSprite 3
+enableYexpandSprite 3
 
 rand16 256
 setSpriteX 3,AX
@@ -78,6 +83,9 @@ setSpriteY 3,40
 
 showSprite 3
 
+;****************************************************
+; SPRITE MOVEMENT
+;****************************************************
 
 ;SCORE
 
@@ -135,7 +143,7 @@ do ;move sprite down across whole screen
         if ge ;if a > 255
             rand16 256
             setSpriteX 2,AX
-            showSprite 2
+	        showSprite 2
         endif
         adc #255
 
@@ -161,10 +169,27 @@ loop
 
 rts
 
+;****************************************************
+; COLLISIONS AND INTERRUPT
+;****************************************************
 
-collision:
+collisionPlus:
+    ldy #5 ;green
+    sty $d020
+    hideSprite 1
+    jmp $ea31
+
+collisionMinus:
     ldy #2 ;red
     sty $d020
+    hideSprite 2
+    jmp $ea31
+
+collisionOver:
+    ldy #0 ;black
+    sty $d020
+    hideSprite 3
+    jmp $ea31
 
 
     ldx currentScore
@@ -172,13 +197,17 @@ collision:
     stx 1459
     stx currentScore
 
+    ;sprite collision register
+    ldax $d01E
+    cmpax #3
+    beq collisionPlus
+    cmpax #5
+    beq collisionMinus
+    cmpax #9
+    beq collisionOver
 
 
-read_input:
-    asl $d019 ;clear interrupt
-    ldx $d01e ;sprite collision register
-    bne collision
-
+    ;player movement
     read_keys_WASDspace
     and $dc00
     and $dc01
