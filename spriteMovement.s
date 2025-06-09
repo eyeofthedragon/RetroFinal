@@ -177,25 +177,50 @@ collisionPlus:
     ldy #5 ;green
     sty $d020
     hideSprite 1
+
+    ldx currentScore
+    inx
+    stx 1459
+    stx currentScore
+  
+    ;txa
+    ;cmp #8
+    ;if eq
+        ;print "you win!"
+    ;endif
+
     jmp $ea31
 
 collisionMinus:
     ldy #2 ;red
     sty $d020
     hideSprite 2
+
+    ldx currentScore
+    txa
+    sbc #49
+    if ge ;don't decrement if we're already at 0
+        dex
+    endif
+    stx 1459
+    stx currentScore
+
     jmp $ea31
 
 collisionOver:
     ldy #0 ;black
     sty $d020
     hideSprite 3
-    jmp $ea31
+
+    print "game over"
+    sei
+    delay_ms 3000
+
+    rts
 
 
-    ldx currentScore
-    inx
-    stx 1459
-    stx currentScore
+read_input:
+    asl $d019 ;clear interrupt
 
     ;sprite collision register
     ldax $d01E
@@ -206,7 +231,6 @@ collisionOver:
     cmpax #9
     beq collisionOver
 
-read_input:
     ;player movement
     read_keys_WASDspace
     and $dc00
@@ -230,7 +254,4 @@ read_input:
     jmp $ea31
 
 joyvalue: .byte 00
-currentScore: .byte 00 ;girl I have no idea
-
-
-
+currentScore: .byte 48
