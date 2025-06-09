@@ -206,7 +206,7 @@ collisionOver:
     cmpax #9
     beq collisionOver
 
-
+read_input:
     ;player movement
     read_keys_WASDspace
     and $dc00
