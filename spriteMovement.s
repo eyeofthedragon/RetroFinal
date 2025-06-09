@@ -79,6 +79,57 @@ setSpriteY 3,40
 showSprite 3
 
 
+;okay okay
+;so to poke things onto the screen
+;it's 1024 + some amount. so if I can just find the right spot
+;it'll be >1024+255 which is uhhh 1279
+;let's just try
+;equiv of poke 1285,81 <-ball
+;which is uh
+;load 81 into A
+;store value of a into 1285
+
+;SCORE
+
+lda #14 ;N
+sta 1297
+lda #21 ;U
+sta 1298
+lda #13 ;M
+sta 1299
+lda #2 ;B
+sta 1300
+lda #5 ;E
+sta 1301
+lda #18 ;R
+sta 1302
+
+lda #15 ;O
+sta 1339
+lda #6 ;F
+sta 1340
+
+lda #6 ;F
+sta 1376
+lda #12 ;L
+sta 1377
+lda #15 ;O
+sta 1378
+lda #23 ;W
+sta 1379
+lda #5 ;E
+sta 1380
+lda #18 ;R
+sta 1381
+lda #19 ;S
+sta 1382
+lda #58 ;:
+sta 1383
+
+
+lda #48 ;0
+sta 1459
+
 
 do ;move sprite down across whole screen
     for Y,0,to,255
@@ -89,6 +140,7 @@ do ;move sprite down across whole screen
         adc #40
         setSpriteY 2,A
 
+        ;make sure each sprite loops once it hits the bottom of the screen
         sbc #254
         if ge ;if a > 255
             rand16 256
@@ -116,20 +168,20 @@ loop
 
 rts
 
-collision_detection:
-    asl $d019 ;clear interrupt
-    ldx $d01e ;sprite collision register
-    bne collision
-    jmp $ea31
 
 collision:
     ldy #2 ;red
     sty $d020
 
 
-read_input:
-    asl $d019 ;clear interrupt
+    ldx currentScore
+    inx
+    stx 1459
+    stx currentScore
 
+
+
+read_input:
     asl $d019 ;clear interrupt
     ldx $d01e ;sprite collision register
     bne collision
@@ -156,3 +208,7 @@ read_input:
     jmp $ea31
 
 joyvalue: .byte 00
+currentScore: .byte 00 ;girl I have no idea
+
+
+

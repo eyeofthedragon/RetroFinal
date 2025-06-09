@@ -1,5 +1,5 @@
-al 000AA3 .__BSS_LOAD__
-al 000AA3 .__BSS_RUN__
+al 000AF5 .__BSS_LOAD__
+al 000AF5 .__BSS_RUN__
 al 000000 .__BSS_SIZE__
 al 000001 .__EXEHDR__
 al 000001 .__LOADADDR__
@@ -7,7 +7,7 @@ al 000000 .__ZP_FILEOFFS__
 al 0000A5 .__ZP_LAST__
 al 000012 .__ZP_SIZE__
 al 0000A5 .__ZP_START__
-al 000A3A ._rand16_sr
-al 000A54 ._read_keys_WASDspace_sr
-al 000A3B ._seed_high
-al 000A3E ._seed_low
+al 000A8C ._rand16_sr
+al 000AA6 ._read_keys_WASDspace_sr
+al 000A8D ._seed_high
+al 000A90 ._seed_low
