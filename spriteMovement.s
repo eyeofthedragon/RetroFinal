@@ -171,13 +171,15 @@ do
         adc #255
 
 	;animation of player sprite
-	mod16 #5
-    	cmp #0
-    	if eq
-	    setSpriteCostume 0,SPRITE_BASE+$40
-	else
-	    setSpriteCostume 0,SPRITE_BASE
-    	endif
+	mod16 #20
+    cmpax #0
+    if eq
+        setSpriteCostume 0,SPRITE_BASE+$40
+    endif
+    cmpax #10
+    if eq
+        setSpriteCostume 0,SPRITE_BASE
+    endif
 
         sync_to_rasterline256
         restore Y
@@ -276,7 +278,7 @@ read_input:
 	lda $d000
 	cmp #20
 	if ge
-            dec $d000 ;move left
+        dec $d000 ;move left
 	endif
     endif
     lsr joyvalue
@@ -284,7 +286,7 @@ read_input:
 	lda $d000
 	cmp #254
 	if lt
-            inc $d000 ;move right
+        inc $d000 ;move right
 	endif
     endif
 
