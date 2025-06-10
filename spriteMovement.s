@@ -36,7 +36,7 @@ setSpriteXY 0,200,200
 showSprite 0
 
 ;****************************************************
-;FLOWER SPRITE 1 (good)
+;RED FLOWER SPRITE 1 (good)
 ;****************************************************
 
 setSpriteCostume 1,SPRITE_BASE+3*$40
@@ -52,13 +52,16 @@ setSpriteY 1,0
 showSprite 1
 
 ;****************************************************
-;FLOWER SPRITE 2 (evil)
+;DATE SPRITE 2
 ;****************************************************
 
-setSpriteCostume 2,SPRITE_BASE+4*$40
+setSpriteCostume 2,SPRITE_BASE+2*$40
 
-setSpriteColor 2,1
+setSpriteColor 2,4
 enableMultiColorSprite 2
+
+enableXexpandSprite 2
+enableYexpandSprite 2
 
 rand16 216
 adcax #40
@@ -68,16 +71,13 @@ setSpriteY 2,40
 showSprite 2
 
 ;****************************************************
-;DATE SPRITE 3
+;WHITE FLOWER SPRITE 3 (bad)
 ;****************************************************
 
-setSpriteCostume 3,SPRITE_BASE+2*$40
+setSpriteCostume 3,SPRITE_BASE+4*$40
 
-setSpriteColor 3,4
+setSpriteColor 3,1
 enableMultiColorSprite 3
-
-enableXexpandSprite 3
-enableYexpandSprite 3
 
 rand16 216
 adcax #40
@@ -138,7 +138,7 @@ do
         setSpriteY 1,Y
 
         tya
-        adc #40
+        adc #30
         setSpriteY 2,A
 
         ;make sure each sprite loops once it hits the bottom of the screen
@@ -151,7 +151,6 @@ do
         endif
         adc #255
 
-        adc #40
         setSpriteY 3,A
 
         sbc #254
@@ -194,7 +193,7 @@ collisionPlus:
 collisionMinus:
     ldy #2 ;red
     sty $d020
-    hideSprite 2
+    hideSprite 3
 
     ldx currentScore
     txa
@@ -215,9 +214,9 @@ read_input:
     ldax $d01E
     cmpax #3
     beq collisionPlus
-    cmpax #5
-    beq collisionMinus
     cmpax #9
+    beq collisionMinus
+    cmpax #5
     longif eq ;game over
 	ldy #0 ;black
     	sty $d020
