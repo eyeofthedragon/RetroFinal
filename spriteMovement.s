@@ -188,12 +188,6 @@ collisionPlus:
     inx
     stx 1459
     stx currentScore
-  
-    lda currentScore
-    ;cmp #56
-    ;if eq
-     ;   print "you win!"
-    ;endif
 
     jmp $ea31
 
@@ -213,17 +207,6 @@ collisionMinus:
 
     jmp $ea31
 
-collisionOver:
-    ldy #0 ;black
-    sty $d020
-    hideSprite 3
-
-    ;print "game over"
-    sei
-    ;delay_ms 3000
-
-    ;rts
-
 
 read_input:
     asl $d019 ;clear interrupt
@@ -235,7 +218,31 @@ read_input:
     cmpax #5
     beq collisionMinus
     cmpax #9
-    beq collisionOver
+    longif eq ;game over
+	ldy #0 ;black
+    	sty $d020
+    	hideSprite 1
+	hideSprite 2
+	hideSprite 3
+	print "oh no!"
+	print "game over"
+	delay_ms 3000
+	rts
+    endif
+
+    ; win condition	
+    lda currentScore
+    cmp #56
+    longif eq
+	ldx #0
+    	stx currentScore
+	hideSprite 1
+	hideSprite 2
+	hideSprite 3
+	print "you win!"
+	delay_ms 3000
+	rts
+    endif
 
     ;player movement
     read_keys_WASDspace
