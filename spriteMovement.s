@@ -170,6 +170,15 @@ do
         endif
         adc #255
 
+	;animation of player sprite
+	mod16 #5
+    	cmp #0
+    	if eq
+	    setSpriteCostume 0,SPRITE_BASE+$40
+	else
+	    setSpriteCostume 0,SPRITE_BASE
+    	endif
+
         sync_to_rasterline256
         restore Y
     next
@@ -264,13 +273,20 @@ read_input:
     lsr joyvalue ;can't move down
 
     if cc
-        dec $d000 ;move left
+	lda $d000
+	cmp #20
+	if ge
+            dec $d000 ;move left
+	endif
     endif
     lsr joyvalue
     if cc
-        inc $d000 ;move right
+	lda $d000
+	cmp #254
+	if lt
+            inc $d000 ;move right
+	endif
     endif
-
 
     ;music
     asl $d019
