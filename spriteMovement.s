@@ -3,11 +3,19 @@
 
 SCREEN_BASE=$400
 SPRITE_BASE=$3000
+MUSIC_BASE=$c000
+
+install_file "FlowerGathering.prg"
 
 sei
 ldax #read_input ;interrupt routine
 stax $314
 cli
+
+init:
+    lda #$00 ;select first line
+    jsr MUSIC_BASE ;init music
+
 
 clrscr ;clear screen
 
@@ -262,6 +270,11 @@ read_input:
     if cc
         inc $d000 ;move right
     endif
+
+
+    ;music
+    asl $d019
+    jsr MUSIC_BASE+3
 
     jmp $ea31
 
