@@ -171,13 +171,15 @@ do
         adc #255
 
 	;animation of player sprite
-	mod16 #5
-    	cmp #0
-    	if eq
-	    setSpriteCostume 0,SPRITE_BASE+$40
-	else
-	    setSpriteCostume 0,SPRITE_BASE
-    	endif
+	mod16 #20
+    cmpax #0
+    if eq
+        setSpriteCostume 0,SPRITE_BASE+$40
+    endif
+    cmpax #10
+    if eq
+        setSpriteCostume 0,SPRITE_BASE
+    endif
 
         sync_to_rasterline256
         restore Y
@@ -235,29 +237,29 @@ read_input:
     beq collisionMinus
     cmpax #5
     longif eq ;game over
-	ldy #0 ;black
+	    ldy #0 ;black
     	sty $d020
     	hideSprite 1
-	hideSprite 2
-	hideSprite 3
-	print "oh no!"
-	print "game over"
-	delay_ms 3000
-	rts
+        hideSprite 2
+        hideSprite 3
+        print "oh no! "
+        print "game over"
+        delay_ms 3000
+        rts
     endif
 
     ; win condition	
     lda currentScore
     cmp #56
     longif eq
-	ldx #0
-    	stx currentScore
-	hideSprite 1
-	hideSprite 2
-	hideSprite 3
-	print "you win!"
-	delay_ms 3000
-	rts
+        ldx #0
+        stx currentScore
+        hideSprite 1
+        hideSprite 2
+        hideSprite 3
+        print "you win!"
+        delay_ms 3000
+        rts
     endif
 
     ;player movement
@@ -276,7 +278,7 @@ read_input:
 	lda $d000
 	cmp #20
 	if ge
-            dec $d000 ;move left
+        dec $d000 ;move left
 	endif
     endif
     lsr joyvalue
@@ -284,7 +286,7 @@ read_input:
 	lda $d000
 	cmp #254
 	if lt
-            inc $d000 ;move right
+        inc $d000 ;move right
 	endif
     endif
 
