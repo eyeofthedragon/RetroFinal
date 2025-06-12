@@ -28,7 +28,7 @@ sta $d021
 ;PLAYER SPRITE 0
 ;****************************************************
 
-setSpriteCostume 0,SPRITE_BASE ;3040 is second costume
+setSpriteCostume 0,SPRITE_BASE 
 
 setSpriteColor 0,3
 enableMultiColorSprite 0
@@ -172,14 +172,14 @@ do
 
 	;animation of player sprite
 	mod16 #20
-    cmpax #0
-    if eq
-        setSpriteCostume 0,SPRITE_BASE+$40
-    endif
-    cmpax #10
-    if eq
-        setSpriteCostume 0,SPRITE_BASE
-    endif
+    	cmpax #0
+    	if eq
+            setSpriteCostume 0,SPRITE_BASE+$40
+    	endif
+    	cmpax #10
+    	if eq
+            setSpriteCostume 0,SPRITE_BASE
+    	endif
 
         sync_to_rasterline256
         restore Y
@@ -237,7 +237,7 @@ read_input:
     beq collisionMinus
     cmpax #5
     longif eq ;game over
-	    ldy #0 ;black
+	ldy #0 ;black
     	sty $d020
     	hideSprite 1
         hideSprite 2
@@ -278,7 +278,7 @@ read_input:
 	lda $d000
 	cmp #20
 	if ge
-        dec $d000 ;move left
+            dec $d000 ;move left
 	endif
     endif
     lsr joyvalue
@@ -286,7 +286,7 @@ read_input:
 	lda $d000
 	cmp #254
 	if lt
-        inc $d000 ;move right
+            inc $d000 ;move right
 	endif
     endif
 
