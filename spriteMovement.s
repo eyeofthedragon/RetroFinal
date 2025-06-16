@@ -5,7 +5,7 @@ SCREEN_BASE=$400
 SPRITE_BASE=$3000
 MUSIC_BASE=$c000
 
-install_file "FlowerGathering.prg"
+install_file "FlowerGatheringFast.prg"
 
 sei
 ldax #read_input ;interrupt routine
