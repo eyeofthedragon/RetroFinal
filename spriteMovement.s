@@ -16,14 +16,6 @@ init:
     lda #$00 ;select first line
     jsr MUSIC_BASE ;init music
 
-
-clrscr ;clear screen
-
-lda #14
-sta $d020
-lda #13
-sta $d021
-
 ;****************************************************
 ;PLAYER SPRITE 0
 ;****************************************************
@@ -41,6 +33,7 @@ enableYexpandSprite 0
 
 setSpriteXY 0,200,200
 
+spriteBeforeBackground 0
 showSprite 0
 
 ;****************************************************
@@ -57,6 +50,7 @@ adcax #40
 setSpriteX 1,AX
 setSpriteY 1,0
 
+spriteBeforeBackground 1
 showSprite 1
 
 ;****************************************************
@@ -76,6 +70,7 @@ adcax #40
 setSpriteX 2,AX
 setSpriteY 2,40
 
+spriteBeforeBackground 2
 showSprite 2
 
 ;****************************************************
@@ -92,6 +87,7 @@ adcax #40
 setSpriteX 3,AX
 setSpriteY 3,40
 
+spriteBeforeBackground 3
 showSprite 3
 
 ;****************************************************
@@ -152,8 +148,8 @@ do
         ;make sure each sprite loops once it hits the bottom of the screen
         sbc #254
         if ge ;if a > 255
-            rand16 216
-	    adcax #40
+            rand16 126
+	    adcax #80
             setSpriteX 2,AX
 	    showSprite 2
         endif
@@ -163,8 +159,8 @@ do
 
         sbc #254
         if ge
-            rand16 216
-	    adcax #40
+            rand16 126
+	    adcax #80
             setSpriteX 3,AX
             showSprite 3
         endif
@@ -185,11 +181,18 @@ do
         restore Y
     next
 
-    rand16 216 ;puts a random number from 0 to 215 in AX
-    adcax #40
+    rand16 126 ;puts a random number from 0 to 215 in AX
+    adcax #80
     setSpriteX 1,AX
     showSprite 1
-loop
+
+    lda gameOver
+    cmp #1
+loop until eq
+
+hideSprite 1
+hideSprite 2
+hideSprite 3
 
 rts
 
@@ -242,10 +245,11 @@ read_input:
     	hideSprite 1
         hideSprite 2
         hideSprite 3
-        print "oh no! "
+	println ""
+        print "oh no!"
         print "game over"
-        delay_ms 3000
-        rts
+        ldy #1
+	sty gameOver
     endif
 
     ; win condition	
@@ -257,9 +261,10 @@ read_input:
         hideSprite 1
         hideSprite 2
         hideSprite 3
+	println ""
         print "you win!"
-        delay_ms 3000
-        rts
+        ldy #1
+	sty gameOver
     endif
 
     ;player movement
@@ -298,3 +303,4 @@ read_input:
 
 joyvalue: .byte 00
 currentScore: .byte 48
+gameOver: .byte 00
