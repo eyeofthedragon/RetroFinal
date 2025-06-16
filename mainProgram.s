@@ -148,7 +148,7 @@ do
         ;make sure each sprite loops once it hits the bottom of the screen
         sbc #254
         if ge ;if a > 255
-            rand16 126
+            rand16 126 ;puts a random number from 80 to 206 in AX
 	    adcax #80
             setSpriteX 2,AX
 	    showSprite 2
@@ -181,7 +181,7 @@ do
         restore Y
     next
 
-    rand16 126 ;puts a random number from 0 to 215 in AX
+    rand16 126
     adcax #80
     setSpriteX 1,AX
     showSprite 1
