@@ -5,7 +5,7 @@ SCREEN_BASE=$400
 SPRITE_BASE=$3000
 MUSIC_BASE=$c000
 
-install_file "FlowerGathering.prg"
+install_file "FlowerGatheringFast.prg"
 
 sei
 ldax #read_input ;interrupt routine
@@ -171,7 +171,7 @@ do
         adc #255
 
 	;animation of player sprite
-	mod16 #20
+	    mod16 #20
     	cmpax #0
     	if eq
             setSpriteCostume 0,SPRITE_BASE+$40
