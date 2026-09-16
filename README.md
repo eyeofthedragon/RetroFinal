@@ -1,4 +1,4 @@
-FRANTIC FLOWERS
+FRANTIC FLOWERS:
 A simple game for the Commodore 64.
 
 Oh no! You forgot to get your girlfriend a gift, and she's already waiting in the park! Luckily there's plenty of flowers.
